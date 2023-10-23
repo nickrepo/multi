@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t ntodorov1414/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run ntodorov1414/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t ntodorov1414/multi-client ./client
+  - docker build -t ntodorov1414/multi-nginx ./nginx
+  - docker build -t ntodorov1414/multi-server ./server
+  - docker build -t ntodorov1414/multi-worker ./worker
